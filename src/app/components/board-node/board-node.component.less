@@ -1,8 +1,24 @@
 .ttt-board-node {
-  width: 60px;
-  height: 60px;
-  background: #eee;
-  &--player {
-    background: #aaa;
+	@cellsize: 60px;
+	@ring-width: 5px;
+	@ring-radius: 30px;
+
+	width: @cellsize;
+	height: @cellsize;
+	background: #eee;
+	position: relative;
+	cursor: pointer;
+	&--player {
+	cursor: default;
+	&:after {
+		content: '';
+		width: 30px;
+		height: 30px;
+		border-radius: 100%;
+		border: @ring-width solid #000;
+		position: absolute;
+		margin-left: (@cellsize - @ring-radius) / 2 - @ring-width;
+		margin-top: (@cellsize - @ring-radius) / 2  - @ring-width;
+    }
   }
 }

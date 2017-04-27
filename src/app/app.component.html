@@ -1,11 +1,11 @@
-<h1>
-  bélás {{title}}
-</h1>
 <div class="tictactoe">
   <div class="tictactoe-board">
     <div class="tictactoe-board__col" *ngFor="let nodeCol of boardNodes">
       <div class="tictactoe-board__colnode" *ngFor="let node of nodeCol">
-        <!--<ttt-board-node></ttt-board-node> -->
+        <ttt-board-node 
+        	[node]="node"
+        	(onUpdated)="nodeUpdated($event)"
+        ></ttt-board-node>
       </div>
     </div>
   </div>

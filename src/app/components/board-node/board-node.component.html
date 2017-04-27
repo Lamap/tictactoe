@@ -1,1 +1,5 @@
-<div class="ttt-board-node"></div>
+<div 
+	class="ttt-board-node" 
+	bind-class.ttt-board-node--player="isPlayer()"
+	(click)="nodeClick($event, node)"
+></div>
