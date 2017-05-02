@@ -9,16 +9,29 @@
 	position: relative;
 	cursor: pointer;
 	&--player {
-	cursor: default;
-	&:after {
-		content: '';
-		width: 30px;
-		height: 30px;
-		border-radius: 100%;
-		border: @ring-width solid #000;
-		position: absolute;
-		margin-left: (@cellsize - @ring-radius) / 2 - @ring-width;
-		margin-top: (@cellsize - @ring-radius) / 2  - @ring-width;
-    }
-  }
+		cursor: default;
+		&:after {
+			content: '';
+			width: 30px;
+			height: 30px;
+			border-radius: 100%;
+			border: @ring-width solid #000;
+			position: absolute;
+			margin-left: (@cellsize - @ring-radius) / 2 - @ring-width;
+			margin-top: (@cellsize - @ring-radius) / 2  - @ring-width;
+	    }
+  	}
+	&--computer {
+		cursor: default;
+		&:after {
+			content: '';
+			width: 30px;
+			height: 30px;
+			border: @ring-width solid #000;
+			position: absolute;
+			margin-left: (@cellsize - @ring-radius) / 2 - @ring-width;
+			margin-top: (@cellsize - @ring-radius) / 2  - @ring-width;
+			transform-origin: 0 0 0;
+		}
+	}
 }

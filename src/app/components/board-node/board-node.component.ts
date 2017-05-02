@@ -18,6 +18,9 @@ export class BoardNodeComponent implements OnInit {
   public isPlayer = () => {
   	return this.node.value === 'user';
   }
+  public isComputer = () => {
+  	return this.node.value === 'computer';
+  }
 
   public nodeClick(event, item) {
   	if (item.value) {

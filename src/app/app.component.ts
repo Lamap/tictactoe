@@ -17,5 +17,14 @@ export class AppComponent {
 
     //TODO: listen to some event from the data source instead of directly from here
     this.boardNodes = this.stateService.getBoard();
+
+    console.log(this.stateService.hasLine("user", 3));
+  }
+  public reset() {
+    console.log("resetBoard");
+    this.stateService.resetBoard();
+    //TODO: listen to some event from the data source instead of directly from here
+    this.boardNodes = this.stateService.getBoard();
+    return false;
   }
 }
