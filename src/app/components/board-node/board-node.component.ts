@@ -9,7 +9,7 @@ import  {IBoardNode} from "../../services/get-state.service";
 export class BoardNodeComponent implements OnInit {
 
   constructor() { }
-  @Input() node;
+  @Input() node
   @Output() onUpdated = new EventEmitter<IBoardNode>();
 
   ngOnInit() {
@@ -17,16 +17,18 @@ export class BoardNodeComponent implements OnInit {
   }
   public isPlayer = () => {
   	return this.node.value === 'user';
-  }
+  };
   public isComputer = () => {
   	return this.node.value === 'computer';
-  }
+  };
+  public isWinningLine = () => {
+  	return this.node.winNode;
+  };
 
   public nodeClick(event, item) {
   	if (item.value) {
   		return;
   	}
-  	console.log(item);
   	let updatedItem: IBoardNode = JSON.parse(JSON.stringify(item));
   	updatedItem.value = "user";
   	this.onUpdated.emit(updatedItem);

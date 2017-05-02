@@ -9,19 +9,21 @@ export class AppComponent {
   public boardNodes: IBoard;
   constructor(private stateService: GetStateService) {
     this.boardNodes = this.stateService.getBoard();
-    console.log(this.boardNodes);
   }
   public nodeUpdated(event: IBoardNode) {
-    console.log("board-node-upd", event);
-    this.stateService.setNode(event.col, event.row, event.value);
+    this.stateService.setNode(event.x, event.y, event.value);
 
     //TODO: listen to some event from the data source instead of directly from here
     this.boardNodes = this.stateService.getBoard();
 
-    console.log(this.stateService.hasLine("user", 3));
+    let winLine = this.stateService.hasWinningLine("user", 3)
+    if (winLine) {
+      this.stateService.decorateWinLine(winLine);
+      //TODO: listen to some event from the data source instead of directly from here
+      this.boardNodes = this.stateService.getBoard();
+    }
   }
   public reset() {
-    console.log("resetBoard");
     this.stateService.resetBoard();
     //TODO: listen to some event from the data source instead of directly from here
     this.boardNodes = this.stateService.getBoard();

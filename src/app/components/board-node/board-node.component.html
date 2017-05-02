@@ -2,5 +2,6 @@
 	class="ttt-board-node" 
 	bind-class.ttt-board-node--player="isPlayer()"
 	bind-class.ttt-board-node--computer="isComputer()"
+	bind-class.ttt-board-node--winning="isWinningLine()"
 	(click)="nodeClick($event, node)"
 ></div>

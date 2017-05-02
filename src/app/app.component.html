@@ -1,7 +1,7 @@
 <div class="tictactoe">
   <div class="tictactoe-board">
-    <div class="tictactoe-board__col" *ngFor="let nodeCol of boardNodes">
-      <div class="tictactoe-board__colnode" *ngFor="let node of nodeCol">
+    <div class="tictactoe-board__col" *ngFor="let row of boardNodes">
+      <div class="tictactoe-board__colnode" *ngFor="let node of row">
         <ttt-board-node 
         	[node]="node"
         	(onUpdated)="nodeUpdated($event)"
