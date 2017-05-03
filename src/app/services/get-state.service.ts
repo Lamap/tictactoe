@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
+import {Subject} from "rxjs/Subject";
+
 type Node = "user" | "computer";
 export interface IBoardNode {
   x: number;
   y: number;
   value: string;
   winNode?: boolean;
+};
+export interface IWinObject {
+  line: IBoardNode[],
+  winner: string
 };
 interface IBoardRow {
   [index: number]: IBoardNode;
@@ -31,8 +37,15 @@ export class GetStateService {
   private xDimension:number = 0;
   private yDimension: number = 0;
   private winLine: IBoardNode[] = [];
+  private boardSource = new Subject<IBoard>();
+  private someoneWon = new Subject<IWinObject>();
   constructor() {
 
+  }
+  public boardSource$ = this.boardSource.asObservable();
+  public someoneWon$ = this.someoneWon.asObservable();
+  public boardUpdated () {
+    this.boardSource.next(this.getBoard());
   }
   public getNodeAt(x:number, y:number): IBoardNode {
     const value: string = this.boardData[y][x] ? this.boardData[y][x].owner : null;
@@ -68,6 +81,10 @@ export class GetStateService {
     for(let winNode of winLine) {
       this.boardData[winNode.y][winNode.x].winLine = true;
     }
+    this.someoneWon.next({
+      line: winLine,
+      winner: winLine[0].value
+    });
   }
   public resetBoard(): void {
     this.boardData = JSON.parse(JSON.stringify(this.initialBoardData));
@@ -77,8 +94,9 @@ export class GetStateService {
       this.boardData[y][x] = {};
     }
     this.boardData[y][x].owner = value;
+    this.boardUpdated();
   }
-  public hasWinningLine(type: Node, length: number): IBoardNode[] {
+  public checkWinning(type: Node, length: number): IBoardNode[] {
     let checkLine = (node: IBoardNode) => {
       if (node.value === type) {
           this.winLine.push(node);
@@ -87,6 +105,7 @@ export class GetStateService {
           this.winLine = [];
         }
         if (this.winLine.length === length) {
+          this.decorateWinLine(this.winLine);
           return true;
         }
     };
@@ -162,7 +181,7 @@ export class GetStateService {
         return this.winLine;
       }
     }
-    
+
     return null;
   }
 }

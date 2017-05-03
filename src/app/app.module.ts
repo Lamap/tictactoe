@@ -6,11 +6,13 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import {GetStateService} from "./services/get-state.service";
 import {BoardNodeComponent} from "./components/board-node/board-node.component";
+import { BoardComponent } from './board/board.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BoardNodeComponent
+    BoardNodeComponent,
+    BoardComponent
   ],
   imports: [
     BrowserModule,

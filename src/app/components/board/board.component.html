@@ -1,0 +1,10 @@
+<div class="tictactoe-board">
+  <div class="tictactoe-board__row" *ngFor="let row of boardNodes">
+    <div class="tictactoe-board__node" *ngFor="let node of row">
+      <ttt-board-node
+        [node]="node"
+        (onUpdated)="nodeUpdated($event)"
+      ></ttt-board-node>
+    </div>
+  </div>
+</div>
