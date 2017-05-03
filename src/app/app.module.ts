@@ -4,9 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import {GetStateService} from "./services/get-state.service";
+import {GameService} from "./services/game.service";
+import {StateService} from "./services/state.service";
 import {BoardNodeComponent} from "./components/board-node/board-node.component";
-import { BoardComponent } from './board/board.component';
+import { BoardComponent } from './components/board/board.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { BoardComponent } from './board/board.component';
     FormsModule,
     HttpModule
   ],
-  providers: [GetStateService],
+  providers: [GameService, StateService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

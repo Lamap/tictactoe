@@ -1,14 +1,7 @@
 <div class="tictactoe">
-  <div class="tictactoe-board">
-    <div class="tictactoe-board__row" *ngFor="let row of boardNodes">
-      <div class="tictactoe-board__node" *ngFor="let node of row">
-        <ttt-board-node
-        	[node]="node"
-        	(onUpdated)="nodeUpdated($event)"
-        ></ttt-board-node>
-      </div>
-    </div>
+  <ttt-board></ttt-board>
+  <div class="tictactoe-scores">
+  	<span class="tictactoe-scores-user"></span><span class="tictactoe-scores-computer"></span>
   </div>
-  <div class="tictactoe-scores"></div>
   <div><a href="#" (click)="reset()" >reset</a></div>
 </div>
