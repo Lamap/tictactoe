@@ -3,12 +3,6 @@ import { TestBed, inject } from '@angular/core/testing';
 import { StateService, IBoard } from './state.service';
 import { GameService } from './game.service';
 
-const initailBoard: IBoard = [
-  [
-
-  ]
-];
-
 describe('StateService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
