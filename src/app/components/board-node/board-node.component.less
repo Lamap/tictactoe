@@ -5,38 +5,35 @@
 
 	width: @cellsize;
 	height: @cellsize;
-	background: #eee;
 	position: relative;
 	cursor: pointer;
+	padding: 10px;
+
+	@keyframes blinker {  
+  		50% { opacity: 0.5; }
+	}
+
+	&__sign {
+		width: 100%;
+		height: 100%;
+		background-repeat: no-repeat;
+	}
 	&--player {
 		cursor: default;
-		&:after {
-			content: '';
-			width: 30px;
-			height: 30px;
-			border-radius: 100%;
-			border: @ring-width solid #000;
-			position: absolute;
-			margin-left: (@cellsize - @ring-radius) / 2 - @ring-width;
-			margin-top: (@cellsize - @ring-radius) / 2  - @ring-width;
-	    }
+		.ttt-board-node__sign {
+			background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNDM4LjUzMyA0MzguNTMzIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA0MzguNTMzIDQzOC41MzM7IiB4bWw6c3BhY2U9InByZXNlcnZlIj48Zz48cGF0aCBkPSJNNDA5LjEzMywxMDkuMjAzYy0xOS42MDgtMzMuNTkyLTQ2LjIwNS02MC4xODktNzkuNzk4LTc5Ljc5NkMyOTUuNzM2LDkuODAxLDI1OS4wNTgsMCwyMTkuMjczLDBjLTM5Ljc4MSwwLTc2LjQ3LDkuODAxLTExMC4wNjMsMjkuNDA3Yy0zMy41OTUsMTkuNjA0LTYwLjE5Miw0Ni4yMDEtNzkuOCw3OS43OTZDOS44MDEsMTQyLjgsMCwxNzkuNDg5LDAsMjE5LjI2N2MwLDM5Ljc4LDkuODA0LDc2LjQ2MywyOS40MDcsMTEwLjA2MmMxOS42MDcsMzMuNTkyLDQ2LjIwNCw2MC4xODksNzkuNzk5LDc5Ljc5OGMzMy41OTcsMTkuNjA1LDcwLjI4MywyOS40MDcsMTEwLjA2MywyOS40MDdzNzYuNDctOS44MDIsMTEwLjA2NS0yOS40MDdjMzMuNTkzLTE5LjYwMiw2MC4xODktNDYuMjA2LDc5Ljc5NS03OS43OThjMTkuNjAzLTMzLjU5NiwyOS40MDMtNzAuMjg0LDI5LjQwMy0xMTAuMDYyQzQzOC41MzMsMTc5LjQ4NSw0MjguNzMyLDE0Mi43OTUsNDA5LjEzMywxMDkuMjAzeiBNMzUzLjc0MiwyOTcuMjA4Yy0xMy44OTQsMjMuNzkxLTMyLjczNiw0Mi42MzMtNTYuNTI3LDU2LjUzNGMtMjMuNzkxLDEzLjg5NC00OS43NzEsMjAuODM0LTc3Ljk0NSwyMC44MzRjLTI4LjE2NywwLTU0LjE0OS02Ljk0LTc3Ljk0My0yMC44MzRjLTIzLjc5MS0xMy45MDEtNDIuNjMzLTMyLjc0My01Ni41MjctNTYuNTM0Yy0xMy44OTctMjMuNzkxLTIwLjg0My00OS43NzItMjAuODQzLTc3Ljk0MWMwLTI4LjE3MSw2Ljk0OS01NC4xNTIsMjAuODQzLTc3Ljk0M2MxMy44OTEtMjMuNzkxLDMyLjczOC00Mi42MzcsNTYuNTI3LTU2LjUzYzIzLjc5MS0xMy44OTUsNDkuNzcyLTIwLjg0LDc3Ljk0My0yMC44NGMyOC4xNzMsMCw1NC4xNTQsNi45NDUsNzcuOTQ1LDIwLjg0YzIzLjc5MSwxMy44OTQsNDIuNjM0LDMyLjczOSw1Ni41MjcsNTYuNTNjMTMuODk1LDIzLjc5MSwyMC44MzgsNDkuNzcyLDIwLjgzOCw3Ny45NDNDMzc0LjU4LDI0Ny40MzYsMzY3LjYzNywyNzMuNDE3LDM1My43NDIsMjk3LjIwOHoiLz48L2c+PC9zdmc+);
+		}
   	}
 	&--computer {
 		cursor: default;
-		&:after {
-			content: '';
-			width: 30px;
-			height: 30px;
-			border: @ring-width solid #000;
-			position: absolute;
-			margin-left: (@cellsize - @ring-radius) / 2 - @ring-width;
-			margin-top: (@cellsize - @ring-radius) / 2  - @ring-width;
-			transform-origin: 0 0 0;
+		.ttt-board-node__sign {
+			background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgOTUuOTM5IDk1LjkzOSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgOTUuOTM5IDk1LjkzOTsiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxnPjxwYXRoIGQ9Ik02Mi44MTksNDcuOTdsMzIuNTMzLTMyLjUzNGMwLjc4MS0wLjc4MSwwLjc4MS0yLjA0NywwLTIuODI4TDgzLjMzMywwLjU4NkM4Mi45NTgsMC4yMTEsODIuNDQ4LDAsODEuOTE5LDBjLTAuNTMsMC0xLjAzOSwwLjIxMS0xLjQxNCwwLjU4Nkw0Ny45NywzMy4xMjFMMTUuNDM1LDAuNTg2Yy0wLjc1LTAuNzUtMi4wNzgtMC43NS0yLjgyOCwwTDAuNTg3LDEyLjYwOGMtMC43ODEsMC43ODEtMC43ODEsMi4wNDcsMCwyLjgyOEwzMy4xMjEsNDcuOTdMMC41ODcsODAuNTA0Yy0wLjc4MSwwLjc4MS0wLjc4MSwyLjA0NywwLDIuODI4bDEyLjAyLDEyLjAyMWMwLjM3NSwwLjM3NSwwLjg4NCwwLjU4NiwxLjQxNCwwLjU4NmMwLjUzLDAsMS4wMzktMC4yMTEsMS40MTQtMC41ODZMNDcuOTcsNjIuODE4bDMyLjUzNSwzMi41MzVjMC4zNzUsMC4zNzUsMC44ODQsMC41ODYsMS40MTQsMC41ODZjMC41MjksMCwxLjAzOS0wLjIxMSwxLjQxNC0wLjU4NmwxMi4wMi0xMi4wMjFjMC43ODEtMC43ODEsMC43ODEtMi4wNDgsMC0yLjgyOEw2Mi44MTksNDcuOTd6Ii8+PC9nPjwvc3ZnPg==);
 		}
 	}
 	&--winning {
-		&:after {
-			border-color: #FF0000;
-		}
+		animation: blinker 2s ease-in-out infinite;
+	}
+	&--freezed {
+		cursor: default;
 	}
 }

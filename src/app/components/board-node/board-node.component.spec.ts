@@ -16,10 +16,11 @@ describe('BoardNodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(BoardNodeComponent);
     component = fixture.componentInstance;
+    component.node = {};
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
   });
 });

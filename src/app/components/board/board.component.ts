@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {GameService, IBoard, IBoardNode, IWinObject} from '../../services/game.service';
+import {GameService, IWinObject} from '../../services/game.service';
+import {StateService, IBoard, IBoardNode} from '../../services/state.service';
 
 @Component({
   selector: 'ttt-board',
@@ -9,27 +10,26 @@ import {GameService, IBoard, IBoardNode, IWinObject} from '../../services/game.s
 export class BoardComponent implements OnInit {
 
 	public boardNodes: IBoard;
-  	constructor(private gameService: GameService) {
-	    this.boardNodes = this.gameService.getBoard();
-	    this.gameService.boardSource$.subscribe((newBoard: IBoard) => {this.boardUpdated(newBoard);});
+  	constructor(private gameService: GameService, private stateService: StateService) {
+	    this.stateService.boardSource$.subscribe((newBoard: IBoard) => {this.boardUpdated(newBoard);});
 	    this.gameService.someoneWon$.subscribe((winning: IWinObject) => {this.onWin(winning);});
+
+	    //TODO: the first initial change does not arrive via subscription
+	    this.boardNodes = this.stateService.getBoard();
 	}
 
 	private boardUpdated(newBoard: IBoard) {
-		console.log("subscribed data arrived: ", newBoard);
 		this.boardNodes = newBoard;
-		this.gameService.checkWinning("user", 3);
 	}
 
 	private onWin(winning: IWinObject) {
-		this.boardNodes = this.gameService.getBoard();
-		console.log("winner: ", winning.winner);
+		this.boardNodes = this.stateService.getBoard();
 	}
 
 	//TODO: use the subscribe instead, update the nodeService directly from the node
 	public nodeUpdated(event: IBoardNode) {
 		//TODO: this is to moved inner, no need for callback here
-		this.gameService.setNode(event.x, event.y, event.value);
+		this.gameService.setNodeToPlayer(event);
 	}
 	ngOnInit() {
 	}

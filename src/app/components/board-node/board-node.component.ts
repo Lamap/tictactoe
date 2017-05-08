@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import  {IBoardNode} from "../../services/get-state.service";
+import  { IWinObject } from "../../services/game.service";
+import  { IBoardNode, IBoard } from "../../services/state.service";
 
 @Component({
   selector: 'ttt-board-node',
@@ -8,30 +9,34 @@ import  {IBoardNode} from "../../services/get-state.service";
 })
 export class BoardNodeComponent implements OnInit {
 
-  constructor() { }
-  @Input() node
+  constructor() {
+
+  }
+  @Input() node;
   @Output() onUpdated = new EventEmitter<IBoardNode>();
 
   ngOnInit() {
   	//this.isPlayer = this.node === 'user';
   }
   public isPlayer = () => {
-  	return this.node.value === 'user';
+  	return this.node.owner === "player";
   };
   public isComputer = () => {
-  	return this.node.value === 'computer';
+  	return this.node.owner === "computer";
   };
   public isWinningLine = () => {
-  	return this.node.winNode;
+  	return this.node.isWinNode;
   };
+  public isFreezed = () => {
+    return this.node.freeze;
+  }
 
   public nodeClick(event, item) {
-  	if (item.value) {
+  	if (item.owner || this.node.freeze) {
   		return;
   	}
   	let updatedItem: IBoardNode = JSON.parse(JSON.stringify(item));
-  	updatedItem.value = "user";
+  	updatedItem.owner = "player";
   	this.onUpdated.emit(updatedItem);
   }
-
 }

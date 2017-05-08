@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BoardComponent } from './board.component';
+import { BoardNodeComponent } from '../board-node/board-node.component';
+import { GameService } from '../../services/game.service';
+import { StateService } from '../../services/state.service';
+
 
 describe('BoardComponent', () => {
   let component: BoardComponent;
@@ -8,7 +12,14 @@ describe('BoardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BoardComponent ]
+      declarations: [ 
+        BoardComponent,
+        BoardNodeComponent
+      ],
+      providers: [
+        GameService,
+        StateService
+      ]
     })
     .compileComponents();
   }));
@@ -19,7 +30,7 @@ describe('BoardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
   });
 });

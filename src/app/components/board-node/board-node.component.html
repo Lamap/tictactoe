@@ -3,5 +3,9 @@
 	bind-class.ttt-board-node--player="isPlayer()"
 	bind-class.ttt-board-node--computer="isComputer()"
 	bind-class.ttt-board-node--winning="isWinningLine()"
+	bind-class.ttt-board-node--freezed="isFreezed()"
+
 	(click)="nodeClick($event, node)"
-></div>
+>
+	<div class="ttt-board-node__sign"></div>
+</div>

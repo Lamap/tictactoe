@@ -1,124 +1,99 @@
 import { Injectable } from '@angular/core';
 import {Subject} from "rxjs/Subject";
-import { StateService } from "./state.service";
+import { StateService, Node, IBoard, IBoardNode } from "./state.service";
 
-
-export type Node = "user" | "computer";
-export interface IBoardNode {
-  x: number;
-  y: number;
-  value: string;
-  winNode?: boolean;
-};
 export interface IWinObject {
   line: IBoardNode[],
-  winner: string
-};
-interface IBoardRow {
-  [index: number]: IBoardNode;
-};
-export interface IBoard {
-  [index: number]: IBoardRow;
+  winner: Node
 };
 
 @Injectable()
 export class GameService {
 
-  private boardData: any[] = [
-    [null, null, null],
-    [null, {owner: "computer"}, null],
-    [null, null, null],
-    [null, null, null],
-    [null, null, null]
-  ];
-  private initialBoardData: any[] = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-    [null, null, null]
-  ];
-  private xDimension:number = 0;
-  private yDimension: number = 0;
   private winLine: IBoardNode[] = [];
-  private boardSource = new Subject<IBoard>();
   private someoneWon = new Subject<IWinObject>();
 
   constructor(private stateService: StateService) {
 
   }
-  public boardSource$ = this.boardSource.asObservable();
   public someoneWon$ = this.someoneWon.asObservable();
-  private boardUpdated () {
-    this.boardSource.next(this.getBoard());
-  }
-  public getNodeAt(x:number, y:number): IBoardNode {
-    const value: string = this.boardData[y][x] ? this.boardData[y][x].owner : null;
-    return {
-      value: value,
-      x: x,
-      y: y
-    };
-  }
-  public getBoard():IBoard {
-    let boardNodes: IBoard = [];
-    this.yDimension = this.boardData.length;
-    for (let y = 0; y < this.boardData.length; y++) {
-      boardNodes[y] = [];
-      if (this.xDimension < this.boardData[y].length) {
-        this.xDimension = this.boardData[y].length;
-      }
-      for (let x = 0; x < this.boardData[x].length; x++) {
-        const value: string = this.boardData[y][x] ? this.boardData[y][x].owner : null;
-        const win: boolean = this.boardData[y][x] ? this.boardData[y][x].winLine : false;
 
-        boardNodes[y][x] = {
-          x: x,
-          y: y,
-          value: value,
-          winNode: win
-        };
+  public startGame() {
+    this.stateService.resetBoard();
+    this.stateService.setGameMode(true);
+  }
+
+  public decorateWinLine(winLine: IBoardNode[]):void {	
+    for(let winNode of winLine) {
+      this.stateService.setNodeToWin(winNode.x, winNode.y);
+    }
+    
+  }
+  public setNodeToPlayer(node: IBoardNode) {
+    node.owner = "player";
+    this.setNode(node);
+    let playerWinLine: IBoardNode[] = this.checkWinning("player", this.stateService.getWinLength());
+    if(playerWinLine) {
+      this.decorateWinLine(playerWinLine);
+      this.someoneWon.next({
+        line: playerWinLine,
+        winner: "player"
+      });
+      this.stateService.incrementPlayerWin();
+      this.freezeNodes();
+      return;
+    }
+    const computerStep: IBoardNode = this.getComputerStep();
+    if (computerStep) {
+      this.setNode(computerStep);
+    }
+    const computerWinLine: IBoardNode[] = this.checkWinning("computer", this.stateService.getWinLength());
+    if (computerWinLine) {
+      this.decorateWinLine(computerWinLine);
+      this.stateService.incrementComputerWin();
+      this.someoneWon.next({
+        line: computerWinLine,
+        winner: "computer"
+      });
+      this.freezeNodes();
+      return;
+    }
+    if (!this.getFreeNodes().length) {
+      this.freezeNodes();
+      this.stateService.incrementDraw();
+      this.someoneWon.next(null);
+    }
+  }
+  private setNode(node:IBoardNode): void {
+  	this.stateService.setNode(node.x, node.y, node.owner);
+  }
+  private freezeNodes() {
+    for (let x = 0; x < this.stateService.getXdimension(); x++) {
+      for (let y = 0; y < this.stateService.getYdimension(); y++) {
+        this.stateService.freezeNode(x, y);
       }
     }
-    return boardNodes;
-  }
-  public decorateWinLine(winLine: IBoardNode[]):void {
-    for(let winNode of winLine) {
-      this.boardData[winNode.y][winNode.x].winLine = true;
-    }
-    this.someoneWon.next({
-      line: winLine,
-      winner: winLine[0].value
-    });
-  }
-  public resetBoard(): void {
-    this.boardData = JSON.parse(JSON.stringify(this.initialBoardData));
-    this.boardUpdated();
-    console.log("state:::::::::", this.stateService.getBoard());
-  }
-  public setNode(x: number, y: number, value: string): void {
-    if (!this.boardData[y][x]) {
-      this.boardData[y][x] = {};
-    }
-    this.boardData[y][x].owner = value;
-    this.boardUpdated();
   }
   public checkWinning(type: Node, length: number): IBoardNode[] {
+  	let winLine: IBoardNode[];
+  	const xDimension: number = this.stateService.getXdimension();
+  	const yDimension: number = this.stateService.getYdimension();
+
     let checkLine = (node: IBoardNode) => {
-      if (node.value === type) {
-          this.winLine.push(node);
+      if (node.owner === type) {
+          winLine.push(node);
         }
         else {
-          this.winLine = [];
+          winLine = [];
         }
-        if (this.winLine.length === length) {
-          this.decorateWinLine(this.winLine);
+        if (winLine.length === length) {
+          this.decorateWinLine(winLine);
           return true;
         }
     };
     let checkDiagonal = (x: number, y: number): boolean => {
-      while (x < this.xDimension && y < this.yDimension) {
-        let node:IBoardNode = this.getNodeAt(x, y);
+      while (x < xDimension && y < yDimension) {
+        let node:IBoardNode = this.stateService.getNodeAt(x, y);
         if (checkLine(node)) {
           return true;
         }
@@ -128,8 +103,8 @@ export class GameService {
       return false;
     };
     let checkDiagonalReverse = (x: number, y: number): boolean => {
-      while (x >= 0 && y < this.yDimension) {
-        let node:IBoardNode = this.getNodeAt(x, y);
+      while (x >= 0 && y < yDimension) {
+        let node:IBoardNode = this.stateService.getNodeAt(x, y);
         if (checkLine(node)) {
           return true;
         }
@@ -140,55 +115,89 @@ export class GameService {
     };
 
     // horizontal
-    for (let y = 0; y < this.yDimension; y++) {
-      this.winLine = [];
-      for (let x = 0; x < this.xDimension; x++) {
-        let node:IBoardNode = this.getNodeAt(x, y);
+    for (let y = 0; y < yDimension; y++) {
+      winLine = [];
+      for (let x = 0; x < xDimension; x++) {
+        let node:IBoardNode = this.stateService.getNodeAt(x, y);
         if (checkLine(node)) {
-          return this.winLine;
+          return winLine;
         }
       }
     }
 
     // vertical
-    for (let x = 0; x < this.xDimension; x++ ) {
-      this.winLine = [];
-      for (let y = 0; y < this.yDimension; y++) {
-        let node:IBoardNode = this.getNodeAt(x, y);
+    for (let x = 0; x < xDimension; x++ ) {
+      winLine = [];
+      for (let y = 0; y < yDimension; y++) {
+        let node:IBoardNode = this.stateService.getNodeAt(x, y);
         if (checkLine(node)) {
-          return this.winLine;
+          return winLine;
         }
       }
     }
 
     // diagonal \
-    for (let x = 0; x < this.xDimension; x++) {
-      this.winLine = [];
+    for (let x = 0; x < xDimension; x++) {
+      winLine = [];
       if (checkDiagonal(x, 0)) {
-        return this.winLine;
+        return winLine;
       }
     }
-    for (let y = 1; y < this.yDimension; y++) {
-      this.winLine = [];
+    for (let y = 1; y < yDimension; y++) {
+      winLine = [];
       if (checkDiagonal(0, y)) {
-        return this.winLine;
+        return winLine;
       }
     }
     // diagonal /
-    for (let x = 0; x < this.xDimension; x++) {
-      this.winLine = [];
+    for (let x = 0; x < xDimension; x++) {
+      winLine = [];
       if (checkDiagonalReverse(x, 0)) {
-        return this.winLine;
+        return winLine;
       }
     }
 
-    for (let y = 1; y < this.yDimension; y++) {
-      this.winLine = [];
-      if (checkDiagonalReverse(this.xDimension - 1, y)) {
-        return this.winLine;
+    for (let y = 1; y < yDimension; y++) {
+      winLine = [];
+      if (checkDiagonalReverse(xDimension - 1, y)) {
+        return winLine;
       }
     }
 
     return null;
+  }
+  public getComputerStep(): IBoardNode {
+  	let computerStep: IBoardNode;
+  	// prevent player
+  	  //this.checkWinning("user", 2);
+    // finish line
+      //this.checkWinning("computer", 2);
+
+  	// if nothing to do just do a random step
+    const freeNodes: IBoardNode[] = this.getFreeNodes();
+    if (!freeNodes.length) {
+      return null;
+    }
+  	computerStep = this.getRandomItem(freeNodes);
+    computerStep.owner = "computer";
+  	return computerStep;
+  }
+  private getFreeNodes(): IBoardNode[] {
+  	let freeNodes = [];
+  	const xDimension: number = this.stateService.getXdimension();
+  	const yDimension: number = this.stateService.getYdimension();
+  	for (let x = 0; x < xDimension; x++ ) {
+      for (let y = 0; y < yDimension; y++) {
+      	const node = this.stateService.getNodeAt(x, y); 
+        if (!node.owner) {
+          freeNodes.push(node);
+        }
+      }
+    }
+    return freeNodes;
+  }
+  private getRandomItem(items: any[]): any {
+  	const randomIndex: number = Math.round(Math.random() * (items.length - 1));
+  	return items[randomIndex];
   }
 }

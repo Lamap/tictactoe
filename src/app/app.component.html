@@ -1,7 +1,14 @@
 <div class="tictactoe">
-  <ttt-board></ttt-board>
-  <div class="tictactoe-scores">
-  	<span class="tictactoe-scores-user"></span><span class="tictactoe-scores-computer"></span>
-  </div>
-  <div><a href="#" (click)="reset()" >reset</a></div>
+	<div *ngIf="isGameStage" class="tictactoe__game">
+		<div>Scores</div>
+		<div class="tictactoe__scores">
+			<div class="tictactoe__score">player <span class="tictactoe__score-point">{{scores.player}}</span></div>
+			<div class="tictactoe__score">draw <span class="tictactoe__score-point">{{scores.draw}}</span></div>
+			<div class="tictactoe__score">computer <span class="tictactoe__score-point">{{scores.computer}}</span></div>
+		</div>
+		<ttt-board ></ttt-board>
+		<button class="btn tictactoe__reset-btn" (click)="reset()">New game</button>
+		<div class="tictactoe__message"> {{message}}</div>
+	</div>
+	<ttt-start-stage *ngIf="!isGameStage"></ttt-start-stage>
 </div>

@@ -1,3 +1,25 @@
 .tictactoe {
-
+	display: flex;
+	justify-content: center;
+	&__scores {
+		display: flex;
+	}
+	&__score {
+		margin: 0 10px;
+	}
+	&__score-point {
+		font-weight: bold;
+		margin: 0 2px;
+	}
+	&__game {
+		display: flex;
+    	flex-direction: column;
+    	align-items: center;
+    	padding: 20px;
+	}
+	&__message {
+		margin-top: 20px;
+		font-weight: bold;
+		text-transform: capitalize;
+	}
 }
