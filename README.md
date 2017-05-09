@@ -31,5 +31,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ### TODOs
 1. Improve computer steps
-2. Cover services with more Unit Tests
-3. Add e2e tests
+2. Constrain winning line length not to be bigger then dimensions
+3. Cover services with more Unit Tests
+4. Add e2e tests
+5. Optimize webstorage read/write might use some third party lib
