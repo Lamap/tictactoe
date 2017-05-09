@@ -1,0 +1,27 @@
+<div class="ttt-start-stage">
+  	<div ngbDropdown class="d-inline-block">
+		<button class="btn btn-outline-primary ttt-start-stage__button" id="xDimension" ngbDropdownToggle>{{xDimension}} horizontal cells</button>
+		<div class="dropdown-menu " aria-labelledby="xDimension">
+			<button class="dropdown-item" (click)="setXDimension($event, 3)" >3 cells</button>
+			<button class="dropdown-item" (click)="setXDimension($event, 4)" >4 cells</button>
+			<button class="dropdown-item" (click)="setXDimension($event, 5)" >5 cells</button>
+		</div>
+    </div>
+    <div ngbDropdown class="d-inline-block">
+		<button class="btn btn-outline-primary ttt-start-stage__button" id="yDimension" ngbDropdownToggle>{{yDimension}} verticalal cells </button>
+		<div class="dropdown-menu " aria-labelledby="yDimension">
+			<button class="dropdown-item" (click)="setYDimension($event, 3)" >3 cells</button>
+			<button class="dropdown-item" (click)="setYDimension($event, 4)" >4 cells</button>
+			<button class="dropdown-item" (click)="setYDimension($event, 5)" >5 cells</button>
+		</div>
+    </div>
+    <div ngbDropdown class="d-inline-block">
+		<button class="btn btn-outline-primary ttt-start-stage__button" id="winLength" ngbDropdownToggle>{{winLength}} in a line to win </button>
+		<div class="dropdown-menu " aria-labelledby="winLength">
+			<button class="dropdown-item" (click)="setWinLine($event, 3)" >3 in a line</button>
+			<button class="dropdown-item" (click)="setWinLine($event, 4)" >4 in a line</button>
+			<button class="dropdown-item" (click)="setWinLine($event, 5)" >5 in a line</button>
+		</div>
+    </div>
+    <button class="ttt-start-stage__start-button btn" (click)="startGame($event)">Start game</button>
+</div>
